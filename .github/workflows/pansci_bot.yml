@@ -1,0 +1,29 @@
+name: 泛科學每日推送機器人
+
+on:
+  schedule:
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 取得程式碼
+      uses: actions/checkout@v3
+
+    - name: 設定 Python 環境
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: 安裝套件
+      run: |
+        pip install -r requirements.txt
+
+    - name: 執行機器人程式
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+      run: |
+        python main.py
